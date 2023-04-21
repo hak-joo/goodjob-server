@@ -4,6 +4,7 @@ import { ResponseType } from 'src/lib/response';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import { Model } from 'mongoose';
+import { encodePassword } from 'src/lib/bcrypt';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,8 @@ export class UserService {
       };
     } else {
       const user = await this.userModel.create(req);
+      user.password = await encodePassword(user.password);
+
       user.prefer = null;
       user.job_group = '';
       await user.save();
@@ -28,19 +31,8 @@ export class UserService {
       };
     }
   }
-
-  public async login(req: UserRegisterDto): Promise<ResponseType> {
-    const foundUser = await this.userModel.findOne({ userId: req.userId });
-    if (foundUser && foundUser.password === req.password) {
-      return {
-        data: foundUser,
-        statusCode: HttpStatus.OK,
-      };
-    } else {
-      return {
-        data: null,
-        statusCode: HttpStatus.NOT_FOUND,
-      };
-    }
+  public async findOne(userId: string): Promise<User> {
+    const foundUser = await this.userModel.findOne({ userId });
+    return foundUser;
   }
 }
