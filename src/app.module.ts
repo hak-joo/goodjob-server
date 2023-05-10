@@ -7,6 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { CompanyController } from './company/company.controller';
+import { CompanyService } from './company/company.service';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -18,8 +21,9 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     PassportModule,
     JwtModule,
+    CompanyModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, CompanyController],
+  providers: [AppService, CompanyService],
 })
 export class AppModule {}

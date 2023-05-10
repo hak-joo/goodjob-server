@@ -23,7 +23,7 @@ export class UserService {
       user.password = await encodePassword(user.password);
 
       user.prefer = null;
-      user.job_group = '';
+      user.jobGroup = '';
       await user.save();
       return {
         data: user,
